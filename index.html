@@ -1,0 +1,1897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be My Valentine? 💖</title>
+    <style>
+        /* =================================================================== */
+        /* ROOT VARIABLES & RESET */
+        /* =================================================================== */
+        :root {
+            --bg-gradient-start: #fce7f3;
+            --bg-gradient-mid: #f3e8ff;
+            --bg-gradient-end: #ffe4e6;
+            --primary-pink: #ec4899;
+            --primary-purple: #a855f7;
+            --text-dark: #374151;
+            --text-light: #6b7280;
+            --white: #ffffff;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-gradient-start: #1e1b2e;
+            --bg-gradient-mid: #2d2640;
+            --bg-gradient-end: #382f4a;
+            --text-dark: #e5e7eb;
+            --text-light: #d1d5db;
+            --glass-bg: rgba(45, 38, 64, 0.8);
+            --shadow: rgba(0, 0, 0, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-mid) 50%, var(--bg-gradient-end) 100%);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Custom cursor - visible sparkle dot (works alongside default cursor) */
+        #customCursor {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.9), rgba(168, 85, 247, 0.9));
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 8px rgba(236, 72, 153, 0.7), 0 0 15px rgba(168, 85, 247, 0.5);
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            mix-blend-mode: screen;
+        }
+
+        /* Custom cursor with sparkle trail */
+        .cursor-sparkle {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(236, 72, 153, 0.9), rgba(168, 85, 247, 0.7));
+            pointer-events: none;
+            z-index: 9998;
+            transition: opacity 0.5s ease;
+            box-shadow: 0 0 8px rgba(236, 72, 153, 0.7);
+        }
+
+        /* =================================================================== */
+        /* PROGRESS BAR */
+        /* =================================================================== */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-pink), var(--primary-purple));
+            z-index: 1000;
+            transition: width 0.1s ease;
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
+        }
+
+        /* =================================================================== */
+        /* THEME TOGGLE */
+        /* =================================================================== */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            border-radius: 50px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--shadow);
+        }
+
+        /* =================================================================== */
+        /* FLOATING HEARTS BACKGROUND */
+        /* =================================================================== */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.6;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* =================================================================== */
+        /* HERO SECTION */
+        /* =================================================================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            position: relative;
+            z-index: 10;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 10vw, 7rem);
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple), var(--primary-pink));
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientShift 3s ease infinite;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 30px rgba(236, 72, 153, 0.3);
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 600px;
+        }
+
+        .button-container {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            min-height: 80px;
+        }
+
+        .btn {
+            padding: 1.5rem 3rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .btn-yes {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            animation: pulse 2s infinite;
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 10px 30px rgba(236, 72, 153, 0.4);
+            }
+            50% {
+                box-shadow: 0 10px 40px rgba(168, 85, 247, 0.6);
+            }
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05) !important;
+        }
+
+        .btn-no {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            color: var(--text-dark);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-no:hover {
+            background: rgba(168, 85, 247, 0.2);
+            transform: scale(0.95);
+            border-color: var(--primary-purple);
+        }
+
+        .btn-no.shake {
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: scale(1); }
+            25% { transform: scale(0.95) rotate(-3deg); }
+            75% { transform: scale(0.95) rotate(3deg); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* =================================================================== */
+        /* MODAL/OVERLAY */
+        /* =================================================================== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            backdrop-filter: blur(0px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s ease;
+            padding: 1rem;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 30px;
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(236, 72, 153, 0.3);
+            transform: scale(0.7) translateY(50px);
+            opacity: 0;
+        }
+
+        .cute-sticker-card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 0.5rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .cute-sticker-card:hover {
+            transform: translateY(-3px);
+        }
+
+        body.dark-mode .cute-sticker-card {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        /* Tenor embed styling */
+        .tenor-gif-embed {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .modal-overlay.active .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+            animation: modalBounce 0.6s ease;
+        }
+
+        @keyframes modalBounce {
+            0% { transform: scale(0.7) translateY(50px); }
+            50% { transform: scale(1.08) translateY(-10px); }
+            75% { transform: scale(0.95) translateY(5px); }
+            100% { transform: scale(1) translateY(0); }
+        }
+
+        .modal-content h2 {
+            font-size: 2.5rem;
+            color: var(--primary-pink);
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-content p {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .modal-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .modal-btn-secondary {
+            background: var(--glass-bg);
+            color: var(--primary-purple);
+            border: 2px solid var(--primary-purple);
+            margin-top: 1rem;
+            font-weight: 700;
+        }
+
+        .modal-btn-secondary:hover {
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border-color: transparent;
+        }
+
+        /* =================================================================== */
+        /* MAIN CONTENT SECTIONS */
+        /* =================================================================== */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .main-content.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .section {
+            margin-bottom: 5rem;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 3rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid rgba(236, 72, 153, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 25px 50px rgba(236, 72, 153, 0.3);
+            border-color: var(--primary-pink);
+        }
+
+        .card:hover::before {
+            left: 100%;
+        }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-pink);
+            margin-bottom: 1rem;
+        }
+
+        .card-description {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .card-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(236, 72, 153, 0.4);
+        }
+
+        /* =================================================================== */
+        /* SECRET NOTE WITH LOCK */
+        /* =================================================================== */
+        .secret-note {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px var(--shadow);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lock-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lock-icon:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .secret-content {
+            display: none;
+            animation: typewriter 3s steps(40);
+        }
+
+        .secret-content.revealed {
+            display: block;
+        }
+
+        @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        /* =================================================================== */
+        /* CAROUSEL/GALLERY */
+        /* =================================================================== */
+        .carousel {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px var(--shadow);
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .carousel-image {
+            width: 100%;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.2), rgba(168, 85, 247, 0.2));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .carousel-caption {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .carousel-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .carousel-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* =================================================================== */
+        /* MUSIC PLAYER */
+        /* =================================================================== */
+        .music-player {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .playlist {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .spotify-playlist {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .spotify-embed-container {
+            background: rgba(29, 185, 84, 0.05);
+            padding: 1.5rem;
+            border-radius: 16px;
+            border: 2px solid rgba(29, 185, 84, 0.15);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .spotify-embed-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .spotify-embed-container:hover {
+            border-color: rgba(29, 185, 84, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2);
+        }
+
+        .spotify-embed-container:hover::before {
+            left: 100%;
+        }
+
+        .song-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .song-number {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            background: linear-gradient(135deg, #1DB954, #1ed760);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 12px rgba(29, 185, 84, 0.3);
+        }
+
+        .song-header-info {
+            flex: 1;
+        }
+
+        .song-title {
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-dark);
+        }
+
+        .song-artist {
+            font-size: 1rem;
+            opacity: 0.75;
+            color: var(--text-light);
+        }
+
+        .spotify-embed-container iframe {
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .audio-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .audio-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .audio-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* =================================================================== */
+        /* REASONS/CHIPS */
+        /* =================================================================== */
+        .reasons-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .reason-chip {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15), rgba(168, 85, 247, 0.15));
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 30px;
+            border: 2px solid rgba(236, 72, 153, 0.4);
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text-dark);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: chipFloat 4s ease-in-out infinite;
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.1);
+        }
+
+        .reason-chip:nth-child(odd) {
+            animation-delay: 0.5s;
+        }
+
+        .reason-chip:nth-child(even) {
+            animation-delay: 1s;
+        }
+
+        .reason-chip:hover {
+            transform: translateY(-8px) scale(1.05);
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border-color: white;
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.4);
+        }
+
+        @keyframes chipFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        .shuffle-btn {
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: block;
+            margin: 0 auto;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.3);
+        }
+
+        .shuffle-btn:hover {
+            transform: scale(1.08) rotate(5deg);
+            box-shadow: 0 12px 35px rgba(236, 72, 153, 0.5);
+        }
+
+        .shuffle-btn:active {
+            transform: scale(0.95) rotate(-5deg);
+        }
+
+        /* =================================================================== */
+        /* SECRET SURPRISE BUTTON */
+        /* =================================================================== */
+        .secret-surprise-btn {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1.5rem 3rem;
+            background: linear-gradient(135deg, #ffd700, #ff69b4);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            z-index: 999;
+            transition: all 0.3s ease;
+            animation: secretPulse 2s infinite;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .secret-surprise-btn.visible {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        @keyframes secretPulse {
+            0%, 100% {
+                transform: translateX(-50%) scale(1);
+                box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+            }
+            50% {
+                transform: translateX(-50%) scale(1.05);
+                box-shadow: 0 10px 40px rgba(255, 105, 180, 0.6);
+            }
+        }
+
+        .secret-surprise-btn:hover {
+            transform: translateX(-50%) scale(1.1);
+        }
+
+        /* =================================================================== */
+        /* CONFETTI */
+        /* =================================================================== */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+
+        .confetti.active {
+            animation: confettiFall 3s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* =================================================================== */
+        /* WAVY SEPARATOR */
+        /* =================================================================== */
+        .wave-separator {
+            width: 100%;
+            height: 60px;
+            margin: 3rem 0;
+        }
+
+        /* =================================================================== */
+        /* TOAST NOTIFICATION */
+        /* =================================================================== */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px var(--shadow);
+            z-index: 9999;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =================================================================== */
+        /* COUPON */
+        /* =================================================================== */
+        .coupon {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 3px dashed var(--primary-pink);
+            max-width: 500px;
+            margin: 2rem auto;
+            text-align: center;
+        }
+
+        .coupon h3 {
+            color: var(--primary-pink);
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .coupon p {
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .download-btn {
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-pink), var(--primary-purple));
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .download-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* =================================================================== */
+        /* RESPONSIVE */
+        /* =================================================================== */
+        @media (max-width: 768px) {
+            .button-container {
+                flex-direction: column;
+            }
+
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .secret-surprise-btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+
+            .toast {
+                right: 1rem;
+                left: 1rem;
+                bottom: 1rem;
+            }
+        }
+
+        /* =================================================================== */
+        /* REDUCED MOTION */
+        /* =================================================================== */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Keep default cursor visible - custom cursor as enhancement */
+        body {
+            cursor: default;
+        }
+
+        /* Hide custom cursor on mobile */
+        @media (hover: none) {
+            #customCursor, .cursor-sparkle {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle">🌙 Dark Mode</button>
+
+    <!-- Custom Cursor (Desktop Only) -->
+    <div id="customCursor"></div>
+    <div id="sparkleContainer"></div>
+
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">Date saved 💘</div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <h1>Will you be my Valentine?</h1>
+        <p>I have a tiny question… and a lot of feelings.</p>
+        <div class="button-container" id="buttonContainer">
+            <button class="btn btn-yes" id="yesBtn">YES 😊</button>
+            <button class="btn btn-no" id="noBtn">NO</button>
+        </div>
+    </section>
+
+    <!-- Modal for YES response -->
+    <div class="modal-overlay" id="modalYes">
+        <div class="modal-content fancy-modal" style="max-width: 650px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 240, 245, 0.95)); border: 3px solid transparent; background-clip: padding-box; position: relative;">
+            <div style="position: absolute; inset: 0; border-radius: 30px; padding: 3px; background: linear-gradient(135deg, #ec4899, #a855f7, #ec4899); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; z-index: -1;"></div>
+            
+            <div style="font-size: 3.5rem; margin-bottom: 0.5rem; animation: bounce 1s ease-in-out infinite;">🎉✨🎊</div>
+            <h2 style="font-size: 3rem; margin-bottom: 0.8rem; background: linear-gradient(135deg, #ec4899, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 900; line-height: 1.2; letter-spacing: -0.5px;">
+                Good choice baby 😌💕
+            </h2>
+            <p style="font-size: 1.2rem; color: #6b7280; margin-bottom: 1.8rem; line-height: 1.6; font-weight: 500;">
+                🎁 You just unlocked unlimited hugs, kisses, and cuddles<br>
+                <span style="font-size: 1rem; font-style: italic; color: #9ca3af;">(redeemable very soon I promise 💖)</span>
+            </p>
+            
+            <!-- Cute Tenor GIF Stickers -->
+            <div style="display: flex; gap: 1.5rem; justify-content: center; align-items: center; margin-bottom: 1.8rem;">
+                <div class="cute-sticker-card" style="width: 190px; height: 190px; padding: 0.8rem; box-shadow: 0 10px 30px rgba(236, 72, 153, 0.3);">
+                    <div class="tenor-gif-embed" data-postid="12746691280645153574" data-share-method="host" data-aspect-ratio="1" data-width="100%">
+                        <a href="https://tenor.com/view/munch-face-gif-12746691280645153574">Munch Face Sticker</a> from 
+                        <a href="https://tenor.com/search/munch+face-stickers">Munch Face Stickers</a>
+                    </div>
+                </div>
+                <div class="cute-sticker-card" style="width: 190px; height: 190px; padding: 0.8rem; box-shadow: 0 10px 30px rgba(168, 85, 247, 0.3);">
+                    <div class="tenor-gif-embed" data-postid="17223160" data-share-method="host" data-aspect-ratio="1" data-width="100%">
+                        <a href="https://tenor.com/view/love-couple-hearts-cute-rub-gif-17223160">Love Couple Sticker</a> from 
+                        <a href="https://tenor.com/search/love-stickers">Love Stickers</a>
+                    </div>
+                </div>
+            </div>
+            
+            <p style="font-size: 1.4rem; background: linear-gradient(135deg, #ec4899, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800; margin-bottom: 1.8rem; line-height: 1.3;">
+                Now you're stuck with me forever ∞ 💕
+            </p>
+            
+            <p style="font-size: 1.1rem; color: #6b7280; margin-bottom: 1rem; font-weight: 500;">
+                Wait... do you want to change your mind? 🤔👋
+            </p>
+            <button class="modal-btn" id="changeMindbtn" style="margin-top: 0.5rem; background: linear-gradient(135deg, #8b5cf6, #6366f1); font-size: 1.1rem; padding: 1rem 2.5rem;">Actually... No 😈</button>
+            <button class="modal-btn modal-btn-secondary" id="continueBtn" style="margin-top: 1rem; font-size: 1.1rem; padding: 1rem 2.5rem;">Let's continue! 💕✨</button>
+        </div>
+    </div>
+
+    <!-- Modal for "No take-backs" -->
+    <div class="modal-overlay" id="modalNoTakebacks">
+        <div class="modal-content fancy-modal" style="max-width: 600px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(243, 232, 255, 0.95)); border: 3px solid transparent; background-clip: padding-box;">
+            <div style="font-size: 3.5rem; margin-bottom: 1rem; animation: bounce 0.8s ease-in-out infinite;">😈✨💕</div>
+            
+            <!-- Cute playful GIF -->
+            <div style="margin-bottom: 1.5rem;">
+                <img src="https://i.pinimg.com/originals/48/23/23/482323c6c8962bc6ff13e63946fbf86a.gif" 
+                     alt="Cute playful cats" 
+                     style="width: 220px; height: 220px; border-radius: 20px; box-shadow: 0 15px 40px rgba(236, 72, 153, 0.4); border: 3px solid rgba(236, 72, 153, 0.3);"
+                     onerror="this.src='https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExNGxkZjJ5YzFiOGp5dW9vZGVob3Z4eHFxdXhtM2lzbnBvZWF5b3I5bCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/MDJ9IbxxvDUQM/giphy.gif';">
+            </div>
+            
+            <h2 style="font-size: 2.8rem; margin-bottom: 1rem; background: linear-gradient(135deg, #ec4899, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 900; letter-spacing: -0.5px;">
+                Haww! Nice try baby 😌💗
+            </h2>
+            <p style="font-size: 1.3rem; margin: 1rem 0; font-weight: 700; color: #374151;">
+                ⏰ Too late now! You already said YES 💖
+            </p>
+            <p style="font-size: 1.15rem; color: #6b7280; margin-bottom: 0.8rem; line-height: 1.6; font-weight: 500;">
+                🔒 No take-backs allowed... You're stuck with me forever 😘
+            </p>
+            <p style="background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; font-size: 1.1rem; margin-bottom: 2rem; font-style: italic;">
+                (And deep down, you love it 💕✨)
+            </p>
+            <button class="modal-btn" id="backToFunBtn" style="background: linear-gradient(135deg, #ec4899, #f472b6); font-size: 1.1rem; padding: 1rem 2rem;">Okay fine, you got me 😊 Let's continue! 💕</button>
+        </div>
+    </div>
+
+    <!-- Modal for Gift -->
+    <div class="modal-overlay" id="modalGift">
+        <div class="modal-content fancy-modal" style="max-width: 700px; max-height: 90vh; overflow-y: auto; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 251, 235, 0.95)); border: 3px solid transparent; background-clip: padding-box; position: relative;">
+            <!-- Close Icon -->
+            <button onclick="closeModal('modalGift')" style="position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; border-radius: 50%; background: rgba(236, 72, 153, 0.1); border: 2px solid var(--primary-pink); color: var(--primary-pink); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10;" onmouseover="this.style.background='var(--primary-pink)'; this.style.color='white';" onmouseout="this.style.background='rgba(236, 72, 153, 0.1)'; this.style.color='var(--primary-pink)';">
+                ✕
+            </button>
+            
+            <div style="font-size: 3.5rem; margin-bottom: 0.8rem; animation: bounce 1s ease-in-out infinite;">🎁✨💝</div>
+            <h2 style="margin-bottom: 1.5rem; font-size: 2.5rem; background: linear-gradient(135deg, #f59e0b, #ec4899, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 900; letter-spacing: -0.5px;">
+                Your Special Gift 🎁💕
+            </h2>
+            <p style="font-size: 1.1rem; color: #6b7280; margin-bottom: 2rem; font-weight: 500;">
+                🌟 Made with love, just for you ✨
+            </p>
+            
+            <!-- Video Gift -->
+            <div id="giftVideo" style="margin: 1.5rem 0;">
+                <video controls style="width: 100%; max-height: 60vh; border-radius: 20px; box-shadow: 0 20px 50px rgba(236, 72, 153, 0.3); border: 3px solid rgba(236, 72, 153, 0.2); object-fit: contain; background: #000;">
+                    <source src="together_forever.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+                <p style="text-align: center; margin-top: 1.2rem; color: #6b7280; font-style: italic; font-size: 1.05rem; font-weight: 500;">
+                    💕 A little something special, made with love for you ✨
+                </p>
+            </div>
+            
+            <button class="modal-btn" style="margin-top: 1.5rem; background: linear-gradient(135deg, #f59e0b, #ec4899); font-size: 1.1rem; padding: 1rem 2rem;" onclick="closeModal('modalGift')">Close 💖</button>
+        </div>
+    </div>
+
+    <!-- Modal for Secret Surprise -->
+    <div class="modal-overlay" id="modalSecretSurprise">
+        <div class="modal-content fancy-modal" style="max-width: 550px; max-height: 90vh; overflow-y: auto; background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(254, 242, 242, 0.95)); border: 3px solid transparent; background-clip: padding-box; position: relative;">
+            <!-- Close Icon -->
+            <button onclick="closeModal('modalSecretSurprise')" style="position: absolute; top: 1rem; right: 1rem; width: 40px; height: 40px; border-radius: 50%; background: rgba(236, 72, 153, 0.1); border: 2px solid var(--primary-pink); color: var(--primary-pink); font-size: 1.5rem; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; z-index: 10;" onmouseover="this.style.background='var(--primary-pink)'; this.style.color='white';" onmouseout="this.style.background='rgba(236, 72, 153, 0.1)'; this.style.color='var(--primary-pink)';">
+                ✕
+            </button>
+            
+            <div style="font-size: 3.5rem; margin-bottom: 0.8rem; animation: pulse 2s ease-in-out infinite;">💖✨🎁</div>
+            <h2 style="font-size: 2.4rem; margin-bottom: 1rem; background: linear-gradient(135deg, #ec4899, #f43f5e, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 900; letter-spacing: -0.5px; line-height: 1.2;">
+                You are my favorite everything 💕
+            </h2>
+            <p style="font-size: 1.1rem; color: #6b7280; margin-bottom: 1.5rem; font-weight: 500; line-height: 1.6;">
+                ✨ Thank you for saying yes. You've made me the happiest person alive 🌟
+            </p>
+            
+            <!-- Cute Bubu Dudu GIF -->
+            <div style="margin: 1.5rem 0; display: flex; justify-content: center;">
+                <div class="cute-sticker-card" style="width: 200px; height: 200px; padding: 0.8rem; box-shadow: 0 20px 50px rgba(236, 72, 153, 0.4); border: 3px solid rgba(244, 63, 94, 0.3);">
+                    <div class="tenor-gif-embed" data-postid="16518562412394508022" data-share-method="host" data-aspect-ratio="1" data-width="100%">
+                        <a href="https://tenor.com/view/bubu-dudu-kisses-in-love-couple-excited-gif-16518562412394508022">Bubu Dudu Kisses GIF</a> from 
+                        <a href="https://tenor.com/search/bubu+dudu-gifs">Bubu Dudu GIFs</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Coupon -->
+            <div class="coupon" style="background: linear-gradient(135deg, rgba(236, 72, 153, 0.1), rgba(244, 63, 94, 0.1)); border: 3px solid rgba(236, 72, 153, 0.3); box-shadow: 0 10px 30px rgba(236, 72, 153, 0.2); padding: 1.5rem;">
+                <h3 style="font-size: 1.6rem; background: linear-gradient(135deg, #ec4899, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 800;">💝 Love Coupon 💝</h3>
+                <p style="font-size: 1rem; font-weight: 600; margin: 0.5rem 0;"><strong>🎁 Good for:</strong> One amazing date of your choice!</p>
+                <p style="font-size: 1rem; font-weight: 600; margin: 0.5rem 0;"><strong>⏰ Valid:</strong> Forever ∞</p>
+                <p style="font-size: 1rem; font-weight: 600; margin: 0.5rem 0;"><strong>💕 Redeemable by:</strong> My Valentine</p>
+                <button class="download-btn" onclick="downloadCoupon()" style="background: linear-gradient(135deg, #ec4899, #f43f5e); font-size: 1rem; padding: 0.8rem 1.8rem; font-weight: 700; margin-top: 1rem;">📥 Download Coupon</button>
+            </div>
+            
+            <button class="modal-btn" onclick="closeModal('modalSecretSurprise')" style="background: linear-gradient(135deg, #a855f7, #8b5cf6); font-size: 1rem; padding: 0.9rem 1.8rem; margin-top: 1.5rem;">Close 💕</button>
+        </div>
+    </div>
+
+    <!-- Main Content (appears after YES) -->
+    <div class="main-content" id="mainContent">
+        <!-- Wavy Separator -->
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z" fill="rgba(236, 72, 153, 0.1)"/>
+        </svg>
+
+        <!-- Section A: Our Date Ideas -->
+        <section class="section" id="dateIdeas">
+            <h2 class="section-title">Date Ideas I Can't Wait For 💕✨</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 1.1rem; margin-bottom: 2rem; font-style: italic;">
+                Every moment with you is an adventure waiting to happen
+            </p>
+            <div class="card-grid" id="dateGrid">
+                <!-- Date cards will be generated by JavaScript -->
+            </div>
+        </section>
+
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,60 600,30 T1200,30 L1200,0 L0,0 Z" fill="rgba(168, 85, 247, 0.1)"/>
+        </svg>
+
+        <!-- Section B: A Secret Note -->
+        <section class="section" id="secretNote">
+            <h2 class="section-title">A Secret Note 💌✨</h2>
+            <p style="text-align: center; color: var(--text-light); font-size: 1.05rem; margin-bottom: 2rem; font-style: italic;">
+                Click the lock to reveal my heart 🔐💕
+            </p>
+            <div class="secret-note">
+                <div class="lock-icon" id="lockIcon" onclick="revealSecret()" style="font-size: 4rem; cursor: pointer; transition: all 0.3s ease;">🔒</div>
+                <div class="secret-content" id="secretContent">
+                    <h3 style="background: linear-gradient(135deg, #ec4899, #f43f5e); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 1rem; font-size: 1.8rem; font-weight: 800;">
+                        💌 My Dearest Valentine,
+                    </h3>
+                    <p style="color: var(--text-dark); line-height: 1.9; text-align: left; font-size: 1.1rem;">
+                        <!-- TODO: Replace this with your personal heartfelt message -->
+                        From the moment I met you, I knew you were special. Your smile lights up my darkest days, 
+                        and your laughter is my favorite sound. Every moment with you feels like a dream I never 
+                        want to wake up from. Thank you for being you, for loving me, and for making every single 
+                        day an adventure. I can't wait to create a million more memories with you. You are my 
+                        favorite person in the entire universe, and I'm so grateful you're mine. ❤️✨
+                    </p>
+                    <p style="text-align: right; background: linear-gradient(135deg, #a855f7, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-weight: 700; margin-top: 1.5rem; font-size: 1.15rem;">
+                        Forever yours,<br>Your biggest admirer 💕
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z" fill="rgba(236, 72, 153, 0.1)"/>
+        </svg>
+
+        <!-- Section C: Favorite Moments / Memories -->
+        <section class="section" id="memories">
+            <h2 class="section-title">Favorite Moments 📸</h2>
+            <div class="carousel">
+                <div class="carousel-track" id="carouselTrack">
+                    <!-- Slides will be generated by JavaScript -->
+                </div>
+            </div>
+            <div class="carousel-controls">
+                <button class="carousel-btn" onclick="prevSlide()">← Previous</button>
+                <button class="carousel-btn" onclick="nextSlide()">Next →</button>
+            </div>
+            <!-- TODO: Add your photos in the JavaScript section below (memoryData array) -->
+        </section>
+
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,60 600,30 T1200,30 L1200,0 L0,0 Z" fill="rgba(168, 85, 247, 0.1)"/>
+        </svg>
+
+        <!-- Section D: Gift Option -->
+        <section class="section" id="gift">
+            <h2 class="section-title">A Special Gift 🎁</h2>
+            <div style="text-align: center;">
+                <button class="btn btn-yes" onclick="openModal('modalGift')" style="font-size: 1.25rem;">
+                    Open your gift 🎁
+                </button>
+            </div>
+        </section>
+
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,0 600,30 T1200,30 L1200,60 L0,60 Z" fill="rgba(236, 72, 153, 0.1)"/>
+        </svg>
+
+        <!-- Section E: Our Soundtrack -->
+        <section class="section" id="soundtrack">
+            <h2 class="section-title">Our Soundtrack 🎵</h2>
+            <div class="music-player">
+                <!-- Spotify Style Header -->
+                <div style="display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; padding: 1.5rem; background: linear-gradient(135deg, rgba(30, 215, 96, 0.1), rgba(29, 185, 84, 0.1)); border-radius: 20px; border: 2px solid rgba(29, 185, 84, 0.3);">
+                    <!-- Spotify Logo SVG -->
+                    <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="12" fill="#1DB954"/>
+                        <path d="M17.9 10.9C14.7 9 9.5 8.8 6.3 9.7C5.8 9.8 5.3 9.5 5.2 9C5.1 8.5 5.4 8 5.9 7.9C9.5 6.9 15.2 7.1 18.8 9.3C19.3 9.6 19.4 10.2 19.1 10.6C18.8 11.1 18.3 11.2 17.9 10.9ZM17.8 13.7C17.5 14.1 17.1 14.2 16.7 13.9C14.1 12.3 10.1 11.9 6.8 12.9C6.3 13 5.9 12.7 5.8 12.3C5.7 11.8 6 11.4 6.4 11.3C10.2 10.2 14.6 10.6 17.6 12.5C18 12.7 18.1 13.3 17.8 13.7ZM16.6 16.4C16.4 16.7 16.1 16.8 15.8 16.6C13.6 15.2 10.8 14.9 6.9 15.8C6.6 15.9 6.3 15.7 6.2 15.4C6.1 15.1 6.3 14.8 6.6 14.7C10.8 13.8 13.9 14.1 16.4 15.7C16.7 15.9 16.8 16.2 16.6 16.4Z" fill="white"/>
+                    </svg>
+                    <div>
+                        <h3 style="color: #1DB954; font-size: 1.5rem; margin-bottom: 0.5rem; font-weight: 700;">Our Special Playlist</h3>
+                        <p style="color: var(--text-light); font-size: 0.95rem;">Songs that remind me of us 💕</p>
+                    </div>
+                </div>
+                
+                <div id="playlist" class="spotify-playlist">
+                    <!-- Spotify embeds will be generated by JavaScript -->
+                </div>
+                
+                <!-- Your Valentine Special Playlist -->
+                <a href="https://open.spotify.com/playlist/1XUvpDWR0ty5aKm9Yg33ds" target="_blank" 
+                   style="display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 2rem; padding: 1rem 2rem; background: #1DB954; color: white; text-decoration: none; border-radius: 50px; font-weight: 700; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(29, 185, 84, 0.3);"
+                   onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(29, 185, 84, 0.5)'"
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(29, 185, 84, 0.3)'">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="12" fill="white"/>
+                        <path d="M17.9 10.9C14.7 9 9.5 8.8 6.3 9.7C5.8 9.8 5.3 9.5 5.2 9C5.1 8.5 5.4 8 5.9 7.9C9.5 6.9 15.2 7.1 18.8 9.3C19.3 9.6 19.4 10.2 19.1 10.6C18.8 11.1 18.3 11.2 17.9 10.9ZM17.8 13.7C17.5 14.1 17.1 14.2 16.7 13.9C14.1 12.3 10.1 11.9 6.8 12.9C6.3 13 5.9 12.7 5.8 12.3C5.7 11.8 6 11.4 6.4 11.3C10.2 10.2 14.6 10.6 17.6 12.5C18 12.7 18.1 13.3 17.8 13.7ZM16.6 16.4C16.4 16.7 16.1 16.8 15.8 16.6C13.6 15.2 10.8 14.9 6.9 15.8C6.6 15.9 6.3 15.7 6.2 15.4C6.1 15.1 6.3 14.8 6.6 14.7C10.8 13.8 13.9 14.1 16.4 15.7C16.7 15.9 16.8 16.2 16.6 16.4Z" fill="#1DB954"/>
+                    </svg>
+                    Open Full Playlist in Spotify
+                </a>
+            </div>
+        </section>
+
+        <svg class="wave-separator" viewBox="0 0 1200 60" preserveAspectRatio="none">
+            <path d="M0,30 Q300,60 600,30 T1200,30 L1200,0 L0,0 Z" fill="rgba(168, 85, 247, 0.1)"/>
+        </svg>
+
+        <!-- Section F: Things I Love About You -->
+        <section class="section" id="reasons">
+            <h2 class="section-title">Things I Love About You 💖</h2>
+            <div class="reasons-container" id="reasonsContainer">
+                <!-- Reason chips will be generated by JavaScript -->
+            </div>
+            <button class="shuffle-btn" onclick="shuffleReasons()">🔀 Shuffle</button>
+        </section>
+
+        <!-- Final Message -->
+        <section class="section" style="text-align: center; padding: 4rem 0;">
+            <h2 style="font-size: 3rem; margin-bottom: 1rem;">Let's make memories on purpose 💕</h2>
+            <p style="font-size: 1.25rem; color: var(--text-light); max-width: 600px; margin: 0 auto;">
+                Thank you for being my Valentine. You've made me the happiest person alive. Here's to us! 🥂
+            </p>
+        </section>
+    </div>
+
+    <!-- Secret Surprise Button (Fixed Bottom) -->
+    <button class="secret-surprise-btn" id="secretSurpriseBtn" onclick="activateSecretSurprise()">
+        Secret Surprise ✨
+    </button>
+
+    <script>
+        // =================================================================== 
+        // DATA & CONFIGURATION 
+        // =================================================================== 
+
+        // Date ideas data
+        const dateIdeas = [
+            { icon: '🌅', title: 'Sunrise Together', description: 'Wake up early, grab coffee, and watch the sunrise - just us.' },
+            { icon: '🍝', title: 'Dinner Date', description: 'Your favorite restaurant, candlelight, and all my attention on you.' },
+            { icon: '🌃', title: 'Night Drive', description: 'Long drive with good music, talking about everything and nothing.' },
+            { icon: '🎬', title: 'Movie Night Cuddles', description: 'Your pick, my arms around you, and endless snacks.' },
+            { icon: '☕', title: 'Café Morning', description: 'Cozy café, warm drinks, deep conversations, and stolen glances.' },
+            { icon: '🎨', title: 'Art & Creativity', description: 'Painting, pottery, or just being silly together creating something.' },
+            { icon: '🌸', title: 'Nature Walk', description: 'A peaceful walk in the park, holding hands, no rush.' },
+            { icon: '🎵', title: 'Live Music Night', description: 'Concert, live band, or just dancing in the living room together.' }
+        ];
+
+        // Memory carousel data
+        // TODO: Replace these with your actual image paths and captions
+        const memoryData = [
+            { 
+                image: 'first_date.jpeg', 
+                caption: '💕 Our First Date',
+                message: 'The day everything changed - I knew you were special from the first moment. Your smile made my heart skip a beat.'
+            },
+            { 
+                image: 'handshake_bond.jpeg', 
+                caption: '🤝 Our Bond',
+                message: 'From a simple handshake to holding hands forever. This is where our journey began, and I wouldn\'t change a thing.'
+            },
+            { 
+                image: 'together_bond.jpeg', 
+                caption: '💑 Together Forever',
+                message: 'Every moment with you is my favorite moment. You and me, that\'s how it should always be. Forever grateful for us.'
+            }
+        ];
+
+        // Playlist data - Your Valentine's Special Playlist with Spotify Embeds
+        const playlistData = [
+            {
+                title: 'Our Little Forever',
+                artist: 'Ed Sheeran',
+                spotifyEmbed: 'https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v',
+                cover: 'https://i.scdn.co/image/ab67616d0000b273ba5db46f4b838ef6027e6f96'
+            },
+            {
+                title: 'The Way You Feel Like Home',
+                artist: 'Stephen Sanchez',
+                spotifyEmbed: 'https://open.spotify.com/embed/track/1Y3LN4zO1Edc2EluIoSPJN',
+                cover: 'https://i.scdn.co/image/ab67616d0000b2737e1eeb0d7cc374a168369c80'
+            },
+            {
+                title: 'My Favorite Place Is You',
+                artist: 'Harry Styles',
+                spotifyEmbed: 'https://open.spotify.com/embed/track/1M4OcYkxAtu3ErzSgDEfoi',
+                cover: 'https://i.scdn.co/image/ab67616d0000b273879e9318cb9f4e05ee552ac9'
+            },
+            {
+                title: 'Every Version of You',
+                artist: 'John Legend',
+                spotifyEmbed: 'https://open.spotify.com/embed/track/3U4isOIWM3VvDubwSI3y7a',
+                cover: 'https://i.scdn.co/image/ab67616d00001e02be82d6249e8d09657835004f'
+            },
+            {
+                title: 'Still Choosing You',
+                artist: 'James Arthur',
+                spotifyEmbed: 'https://open.spotify.com/embed/track/5uCax9HTNlzGybIStD3vDh',
+                cover: 'https://i.scdn.co/image/ab67616d00001e02b5a3d8cb4ee0b8565f66b3c9'
+            }
+        ];
+
+        // Reasons I love you - Keep it short and sweet
+        // TODO: Customize with your own specific reasons
+        let reasonsList = [
+            'The way you smile when you see me 😊',
+            'How you laugh at my silly jokes 😂',
+            'Your cute morning voice 💝',
+            'When you get excited about little things ✨',
+            'Your amazing hugs that feel like home 🤗',
+            'The sparkle in your eyes when you\'re happy 💫',
+            'How you always know what I need 💕',
+            'Your adorable sleepy face 😴',
+            'The way you hold my hand 🤝',
+            'How you make everything better 🌟'
+        ];
+
+        // Random cute messages for YES modal
+        const cuteMessages = [
+            'You + me = forever together 💕',
+            'Yay! Officially mine now, no returns! 😘',
+            'I knew you couldn\'t resist me 😌',
+            'Best decision ever, meri jaan! 🥰',
+            'Aww baby, you made me so happy! 💖'
+        ];
+
+        // YES button progressive messages
+        const yesButtonMessages = [
+            'YES 😊',
+            'Come on baby 😇',
+            'You know you want to 💖',
+            'Please mere bacha? 🥺',
+            'Just say yes na 🙏',
+            'I\'m waiting for you... 😌',
+            'You\'re mine already 💕',
+            'Don\'t make me wait 🥰'
+        ];
+
+        // =================================================================== 
+        // STATE VARIABLES 
+        // =================================================================== 
+        let noAttempts = 0;
+        let yesScaleLevel = 1;
+        let currentYesMessageIndex = 0;
+        let currentSlide = 0;
+        let currentSongIndex = 0;
+
+        // =================================================================== 
+        // INITIALIZATION 
+        // =================================================================== 
+        document.addEventListener('DOMContentLoaded', function() {
+            initFloatingHearts();
+            initCursorSparkles();
+            initProgressBar();
+            generateDateCards();
+            generateCarousel();
+            generatePlaylist();
+            generateReasons();
+            
+            // NO button stays in place - no initialization needed
+            
+            // Event Listeners
+            document.getElementById('yesBtn').addEventListener('click', handleYesClick);
+            document.getElementById('noBtn').addEventListener('click', handleNoClick);
+            document.getElementById('noBtn').addEventListener('touchstart', handleNoTouch);
+            document.getElementById('changeMindbtn').addEventListener('click', () => {
+                closeModal('modalYes');
+                openModal('modalNoTakebacks');
+            });
+            document.getElementById('continueBtn').addEventListener('click', () => {
+                closeModal('modalYes');
+                document.getElementById('mainContent').classList.add('visible');
+                document.getElementById('secretSurpriseBtn').classList.add('visible');
+                
+                // Animate sections
+                setTimeout(() => animateSections(), 300);
+            });
+            document.getElementById('backToFunBtn').addEventListener('click', () => {
+                closeModal('modalNoTakebacks');
+                document.getElementById('mainContent').classList.add('visible');
+                document.getElementById('secretSurpriseBtn').classList.add('visible');
+                
+                // Animate sections
+                setTimeout(() => animateSections(), 300);
+            });
+
+            // Load Tenor embed script
+            if (!document.querySelector('script[src="https://tenor.com/embed.js"]')) {
+                const tenorScript = document.createElement('script');
+                tenorScript.type = 'text/javascript';
+                tenorScript.async = true;
+                tenorScript.src = 'https://tenor.com/embed.js';
+                document.body.appendChild(tenorScript);
+            }
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        });
+
+        // =================================================================== 
+        // FLOATING HEARTS 
+        // =================================================================== 
+        function initFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            const heartEmojis = ['💖', '💕', '💗', '💓', '💝', '❤️', '💘'];
+            
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(heart);
+                
+                setTimeout(() => heart.remove(), 20000);
+            }, 2000);
+        }
+
+        // =================================================================== 
+        // CURSOR SPARKLES 
+        // =================================================================== 
+        function initCursorSparkles() {
+            if (window.matchMedia('(hover: none)').matches) return; // Skip on touch devices
+            
+            const customCursor = document.getElementById('customCursor');
+            const sparkleContainer = document.getElementById('sparkleContainer');
+            let sparkles = [];
+            
+            // Move custom cursor
+            document.addEventListener('mousemove', (e) => {
+                customCursor.style.left = e.pageX + 'px';
+                customCursor.style.top = e.pageY + 'px';
+                
+                // Create sparkle trail (throttled)
+                if (Math.random() > 0.7) { // Only create sparkle 30% of the time
+                    const sparkle = document.createElement('div');
+                    sparkle.className = 'cursor-sparkle';
+                    sparkle.style.left = e.pageX + 'px';
+                    sparkle.style.top = e.pageY + 'px';
+                    sparkleContainer.appendChild(sparkle);
+                    sparkles.push(sparkle);
+                    
+                    // Fade out and remove
+                    setTimeout(() => {
+                        sparkle.style.opacity = '0';
+                    }, 100);
+                    
+                    setTimeout(() => {
+                        sparkle.remove();
+                        sparkles = sparkles.filter(s => s !== sparkle);
+                    }, 600);
+                    
+                    // Limit number of sparkles
+                    if (sparkles.length > 15) {
+                        sparkles[0].remove();
+                        sparkles.shift();
+                    }
+                }
+            });
+        }
+
+        // =================================================================== 
+        // PROGRESS BAR 
+        // =================================================================== 
+        function initProgressBar() {
+            const progressBar = document.getElementById('progressBar');
+            
+            window.addEventListener('scroll', () => {
+                const windowHeight = window.innerHeight;
+                const documentHeight = document.documentElement.scrollHeight;
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const scrollPercentage = (scrollTop / (documentHeight - windowHeight)) * 100;
+                
+                progressBar.style.width = scrollPercentage + '%';
+            });
+        }
+
+        // =================================================================== 
+        // THEME TOGGLE 
+        // =================================================================== 
+        function toggleTheme() {
+            const body = document.body;
+            const themeToggle = document.getElementById('themeToggle');
+            const currentTheme = body.getAttribute('data-theme');
+            
+            if (currentTheme === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                themeToggle.textContent = '☀️ Light Mode';
+            } else {
+                body.setAttribute('data-theme', 'light');
+                themeToggle.textContent = '🌙 Dark Mode';
+            }
+        }
+
+        // =================================================================== 
+        // YES/NO BUTTON LOGIC 
+        // =================================================================== 
+        function handleYesClick() {
+            // Show modal
+            openModal('modalYes');
+            
+            // Show random cute message
+            const randomMessage = cuteMessages[Math.floor(Math.random() * cuteMessages.length)];
+            document.getElementById('randomLine').textContent = randomMessage;
+            
+            // Trigger confetti
+            createConfetti();
+            
+            // Don't auto-close - let user control with button
+            // Modal stays open until user clicks continue or change mind button
+        }
+
+        function handleNoClick(e) {
+            e.preventDefault();
+            growYesButton();
+        }
+
+        function handleNoHover() {
+            // No hover action - button stays in place
+        }
+
+        function handleNoTouch(e) {
+            e.preventDefault();
+            growYesButton();
+        }
+
+        function growYesButton() {
+            const noBtn = document.getElementById('noBtn');
+            const yesBtn = document.getElementById('yesBtn');
+            
+            noAttempts++;
+            
+            // Shake NO button to show it was clicked
+            noBtn.classList.add('shake');
+            setTimeout(() => noBtn.classList.remove('shake'), 300);
+            
+            // Grow YES button
+            yesScaleLevel += 0.15;
+            yesBtn.style.transform = `scale(${yesScaleLevel})`;
+            
+            // Change YES button text progressively
+            if (currentYesMessageIndex < yesButtonMessages.length - 1) {
+                currentYesMessageIndex++;
+                yesBtn.textContent = yesButtonMessages[currentYesMessageIndex];
+            }
+        }
+
+        // =================================================================== 
+        // MODAL FUNCTIONS 
+        // =================================================================== 
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            
+            // Stop and reset any videos in the modal
+            const videos = modal.querySelectorAll('video');
+            videos.forEach(video => {
+                video.pause();
+                video.currentTime = 0; // Reset to beginning
+            });
+        }
+
+        // =================================================================== 
+        // CONFETTI 
+        // =================================================================== 
+        function createConfetti() {
+            const colors = ['#ec4899', '#a855f7', '#f472b6', '#c084fc', '#fbbf24'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.classList.add('active');
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 3000);
+                }, i * 20);
+            }
+        }
+
+        // =================================================================== 
+        // ANIMATE SECTIONS 
+        // =================================================================== 
+        function animateSections() {
+            const sections = document.querySelectorAll('.section');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate-in');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // =================================================================== 
+        // GENERATE DATE CARDS 
+        // =================================================================== 
+        function generateDateCards() {
+            const grid = document.getElementById('dateGrid');
+            
+            dateIdeas.forEach(date => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-icon">${date.icon}</div>
+                    <h3 class="card-title">${date.title}</h3>
+                    <p class="card-description">${date.description}</p>
+                    <button class="card-btn" onclick="pickDate('${date.title}')">Pick this</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function pickDate(title) {
+            showToast(`${title} saved 💘`);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // =================================================================== 
+        // SECRET NOTE 
+        // =================================================================== 
+        function revealSecret() {
+            const lockIcon = document.getElementById('lockIcon');
+            const secretContent = document.getElementById('secretContent');
+            
+            lockIcon.style.display = 'none';
+            secretContent.classList.add('revealed');
+        }
+
+        // =================================================================== 
+        // CAROUSEL 
+        // =================================================================== 
+        function generateCarousel() {
+            const track = document.getElementById('carouselTrack');
+            
+            memoryData.forEach(memory => {
+                const slide = document.createElement('div');
+                slide.className = 'carousel-slide';
+                slide.innerHTML = `
+                    <div class="carousel-image" style="position: relative; overflow: hidden; box-shadow: 0 15px 40px rgba(236, 72, 153, 0.3); border: 3px solid rgba(236, 72, 153, 0.2);">
+                        <img src="${memory.image}" alt="Memory" style="width: 100%; height: 100%; object-fit: cover; border-radius: 15px;">
+                    </div>
+                    <h3 style="color: var(--primary-pink); font-size: 1.5rem; margin: 1rem 0 0.5rem 0; font-weight: 700;">${memory.caption}</h3>
+                    <p class="carousel-caption" style="font-size: 1.05rem; line-height: 1.6; font-style: italic; color: var(--text-light);">${memory.message}</p>
+                `;
+                track.appendChild(slide);
+            });
+        }
+
+        function nextSlide() {
+            const track = document.getElementById('carouselTrack');
+            const totalSlides = memoryData.length;
+            
+            currentSlide = (currentSlide + 1) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        function prevSlide() {
+            const track = document.getElementById('carouselTrack');
+            const totalSlides = memoryData.length;
+            
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            track.style.transform = `translateX(-${currentSlide * 100}%)`;
+        }
+
+        // =================================================================== 
+        // MUSIC PLAYER 
+        // =================================================================== 
+        function generatePlaylist() {
+            const playlist = document.getElementById('playlist');
+            
+            playlistData.forEach((song, index) => {
+                const container = document.createElement('div');
+                container.className = 'spotify-embed-container';
+                
+                container.innerHTML = `
+                    <div class="song-header">
+                        <div class="song-number">${index + 1}</div>
+                        <div class="song-header-info">
+                            <div class="song-title">${song.title}</div>
+                            <div class="song-artist">${song.artist}</div>
+                        </div>
+                    </div>
+                    <iframe 
+                        style="border-radius:12px" 
+                        src="${song.spotifyEmbed}?utm_source=generator&theme=0" 
+                        width="100%" 
+                        height="152" 
+                        frameborder="0" 
+                        allowfullscreen="" 
+                        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                        loading="lazy">
+                    </iframe>
+                `;
+                
+                playlist.appendChild(container);
+            });
+        }
+
+        // =================================================================== 
+        // REASONS 
+        // =================================================================== 
+        function generateReasons() {
+            const container = document.getElementById('reasonsContainer');
+            container.innerHTML = '';
+            
+            reasonsList.forEach(reason => {
+                const chip = document.createElement('div');
+                chip.className = 'reason-chip';
+                chip.textContent = reason;
+                container.appendChild(chip);
+            });
+        }
+
+        function shuffleReasons() {
+            // Shuffle array
+            for (let i = reasonsList.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [reasonsList[i], reasonsList[j]] = [reasonsList[j], reasonsList[i]];
+            }
+            
+            // Regenerate with smooth animation
+            const container = document.getElementById('reasonsContainer');
+            const chips = container.querySelectorAll('.reason-chip');
+            
+            // Fade out with stagger
+            chips.forEach((chip, index) => {
+                setTimeout(() => {
+                    chip.style.opacity = '0';
+                    chip.style.transform = 'translateY(-30px) scale(0.8)';
+                }, index * 30);
+            });
+            
+            setTimeout(() => {
+                generateReasons();
+                const newChips = container.querySelectorAll('.reason-chip');
+                
+                // Fade in with stagger
+                newChips.forEach((chip, index) => {
+                    chip.style.opacity = '0';
+                    chip.style.transform = 'translateY(30px) scale(0.8)';
+                    chip.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    
+                    setTimeout(() => {
+                        chip.style.opacity = '1';
+                        chip.style.transform = 'translateY(0) scale(1)';
+                    }, index * 40);
+                });
+            }, chips.length * 30 + 200);
+        }
+
+        // =================================================================== 
+        // SECRET SURPRISE 
+        // =================================================================== 
+        function activateSecretSurprise() {
+            createConfetti();
+            openModal('modalSecretSurprise');
+        }
+
+        function downloadCoupon() {
+            const couponText = `
+═══════════════════════════════════
+        💝 LOVE COUPON 💝
+═══════════════════════════════════
+
+Good for: One amazing date of your choice!
+
+Valid: Forever ♾️
+
+Redeemable by: My Valentine
+
+Terms: Must be used with love and joy
+
+═══════════════════════════════════
+        Made with ❤️
+═══════════════════════════════════
+            `;
+            
+            const blob = new Blob([couponText], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'love_coupon.txt';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            showToast('Coupon downloaded! 💖');
+        }
+    </script>
+</body>
+</html>
